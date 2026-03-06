@@ -1,274 +1,1342 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MRO Digital Twin | Fleet Integration &amp; Value Proposition</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
-<style>
-:root{--bg:#0a0d14;--surface:#111520;--surface2:#161b2a;--border:#1e2840;--accent:#3b82f6;--accent2:#6366f1;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--text:#e2e8f0;--muted:#64748b}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);background:rgba(10,13,20,0.85)}
-.logo{font-size:1rem;font-weight:700;letter-spacing:.03em;color:var(--text)}.logo span{color:var(--accent)}
-.nav-badge{font-size:.75rem;padding:.25rem .75rem;border-radius:99px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--accent)}
-.hero{padding:5rem 2.5rem 3rem;max-width:1200px;margin:0 auto;text-align:center}
-.hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.15;margin-bottom:1.25rem;background:linear-gradient(135deg,#e2e8f0 30%,#7db3ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--muted);font-size:1.1rem;max-width:720px;margin:0 auto 2.5rem}
-.kpi-row{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.75rem;min-width:180px;text-align:center;transition:transform .2s,border-color .2s}
-.kpi:hover{transform:translateY(-3px);border-color:rgba(59,130,246,.4)}
-.kpi-value{font-size:2rem;font-weight:800;color:var(--accent)}.kpi-label{font-size:.8rem;color:var(--muted);margin-top:.3rem;text-transform:uppercase;letter-spacing:.05em}
-.section{max-width:1200px;margin:0 auto;padding:1.5rem 2.5rem 3rem}
-.section-title{font-size:1.5rem;font-weight:700;margin-bottom:.4rem}
-.section-sub{color:var(--muted);margin-bottom:2rem;font-size:.95rem}
-hr.divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
-.spectrum-wrapper{position:relative;padding:1.5rem 0}
-.spectrum-track{height:6px;background:linear-gradient(to right,#ef4444,#f59e0b,#10b981);border-radius:3px;margin-bottom:3rem}
-.spectrum-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:.5rem}
-.fleet-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
-.fleet-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
-.fleet-card:hover{transform:translateY(-3px)}
-.fleet-card.hard{border-color:rgba(239,68,68,.3)}.fleet-card.medium{border-color:rgba(245,158,11,.3)}.fleet-card.easy{border-color:rgba(16,185,129,.3)}
-.fleet-card .tag{display:inline-block;font-size:.7rem;font-weight:600;padding:.2rem .6rem;border-radius:6px;margin-bottom:.85rem;text-transform:uppercase;letter-spacing:.05em}
-.tag-hard{background:rgba(239,68,68,.15);color:#ef4444}.tag-medium{background:rgba(245,158,11,.15);color:#f59e0b}.tag-easy{background:rgba(16,185,129,.15);color:#10b981}
-.fleet-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
-.fleet-card .aircraft-list{font-size:.82rem;color:var(--muted);margin-bottom:.85rem;line-height:1.6}
-.fleet-card .method-badge{font-size:.78rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;color:var(--accent)}
-.fleet-card .cost-note{font-size:.78rem;margin-top:.75rem;color:var(--muted)}.fleet-card .cost-note strong{color:var(--text)}
-.corner-glow{position:absolute;width:80px;height:80px;border-radius:50%;top:-20px;right:-20px;opacity:.12;filter:blur(20px)}
-.glow-red{background:#ef4444}.glow-amber{background:#f59e0b}.glow-green{background:#10b981}
-.path-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border-radius:14px;overflow:hidden}
-.path-step{background:var(--surface);padding:1.4rem 1.25rem}
-.step-num{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
-.path-step h4{font-size:.95rem;font-weight:600;margin-bottom:.35rem}.path-step p{font-size:.8rem;color:var(--muted);line-height:1.5}
-.path-step .tech{font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--accent2);margin-top:.5rem}
-.vp-table{width:100%;border-collapse:collapse;font-size:.88rem}
-.vp-table th{padding:.75rem 1rem;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border)}
-.vp-table td{padding:.85rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
-.vp-table tr:hover td{background:var(--surface2)}
-.vp-table .check{color:#10b981;font-size:1rem}.vp-table .cross{color:#ef4444;font-size:1rem}.vp-table .highlight{color:var(--accent);font-weight:600}
-.sim-container{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.sim-toolbar{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.sim-toolbar h3{font-size:.95rem;font-weight:600;flex:1}
-.sim-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.4rem .8rem;border-radius:8px;font-size:.82rem;font-family:'Inter',sans-serif}
-.btn{padding:.45rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .18s}
-.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#2563eb}
-.btn-stop{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
-.btn-reset{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
-.sim-body{display:grid;grid-template-columns:1fr 320px;min-height:380px}
-.sim-chart-area{padding:1.25rem 1.5rem;border-right:1px solid var(--border)}
-.sim-chart-title{font-size:.78rem;color:var(--muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.05em}
-canvas#simCanvas{width:100%;height:220px;border-radius:8px;background:var(--bg)}
-.sensor-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem}
-.sensor-cell{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem}
-.sensor-name{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.sensor-val{font-size:.95rem;font-weight:600;font-family:'JetBrains Mono',monospace;margin-top:.2rem}
-.sim-panel{padding:1.25rem}
-.score-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1.1rem;margin-bottom:1rem;text-align:center}
-.score-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
-.score-value{font-size:2.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;transition:color .3s}
-.alert-badge{display:inline-block;padding:.3rem 1.1rem;border-radius:99px;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:.4rem;transition:all .3s}
-.alert-NOMINAL{background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.3)}
-.alert-WARNING{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
-.alert-CRITICAL{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
-.business-readout{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1rem}
-.readout-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;font-size:.8rem}
-.readout-row:not(:last-child){border-bottom:1px solid var(--border)}
-.readout-key{color:var(--muted)}.readout-val{font-weight:600;font-family:'JetBrains Mono',monospace}
-.event-log{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:.75rem;max-height:110px;overflow-y:auto;font-size:.72rem;font-family:'JetBrains Mono',monospace;color:var(--muted)}
-.log-entry{padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.log-nom{color:#64748b}.log-warn{color:#f59e0b}.log-crit{color:#ef4444}.log-work{color:#10b981}
-.roi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.25rem;margin-bottom:2rem}
-.roi-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem;text-align:center}
-.roi-icon{font-size:1.8rem;margin-bottom:.5rem}.roi-label{font-size:.78rem;color:var(--muted);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
-.roi-number{font-size:1.6rem;font-weight:800;color:var(--accent)}.roi-note{font-size:.75rem;color:var(--muted);margin-top:.3rem}
-footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;text-align:center;color:var(--muted);font-size:.8rem}
-@media(max-width:768px){nav{padding:.85rem 1.25rem}.hero{padding:3rem 1.25rem 2rem}.section{padding:1rem 1.25rem 2.5rem}.sim-body{grid-template-columns:1fr}.sim-chart-area{border-right:none;border-bottom:1px solid var(--border)}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MRO Digital Twin | Fleet Integration & Value Proposition</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0d14;
+      --surface: #111520;
+      --surface2: #161b2a;
+      --border: #1e2840;
+      --accent: #3b82f6;
+      --accent2: #6366f1;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(10, 13, 20, 0.85)
+    }
+
+    .logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      color: var(--text)
+    }
+
+    .logo span {
+      color: var(--accent)
+    }
+
+    .nav-badge {
+      font-size: .75rem;
+      padding: .25rem .75rem;
+      border-radius: 99px;
+      background: rgba(59, 130, 246, .15);
+      border: 1px solid rgba(59, 130, 246, .3);
+      color: var(--accent)
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      padding: 5rem 2.5rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #e2e8f0 30%, #7db3ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 720px;
+      margin: 0 auto 2.5rem
+    }
+
+    .kpi-row {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.75rem;
+      min-width: 180px;
+      text-align: center;
+      transition: transform .2s, border-color .2s
+    }
+
+    .kpi:hover {
+      transform: translateY(-3px);
+      border-color: rgba(59, 130, 246, .4)
+    }
+
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent)
+    }
+
+    .kpi-label {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: .3rem;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    /* ── SECTION SHELL ────────────────────────────────────── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2.5rem 3rem
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: .4rem
+    }
+
+    .section-sub {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: .95rem
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0
+    }
+
+    /* ── FLEET SPECTRUM ───────────────────────────────────── */
+    .spectrum-wrapper {
+      position: relative;
+      padding: 1.5rem 0
+    }
+
+    .spectrum-track {
+      height: 6px;
+      background: linear-gradient(to right, #ef4444, #f59e0b, #10b981);
+      border-radius: 3px;
+      margin-bottom: 3rem;
+      position: relative
+    }
+
+    .spectrum-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .5rem
+    }
+
+    .fleet-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem
+    }
+
+    .fleet-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s
+    }
+
+    .fleet-card:hover {
+      transform: translateY(-3px)
+    }
+
+    .fleet-card.hard {
+      border-color: rgba(239, 68, 68, .3)
+    }
+
+    .fleet-card.medium {
+      border-color: rgba(245, 158, 11, .3)
+    }
+
+    .fleet-card.easy {
+      border-color: rgba(16, 185, 129, .3)
+    }
+
+    .fleet-card .tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 6px;
+      margin-bottom: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    .tag-hard {
+      background: rgba(239, 68, 68, .15);
+      color: #ef4444
+    }
+
+    .tag-medium {
+      background: rgba(245, 158, 11, .15);
+      color: #f59e0b
+    }
+
+    .tag-easy {
+      background: rgba(16, 185, 129, .15);
+      color: #10b981
+    }
+
+    .fleet-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .4rem
+    }
+
+    .fleet-card .aircraft-list {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: .85rem;
+      line-height: 1.6
+    }
+
+    .fleet-card .method-badge {
+      font-size: .78rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .3rem .6rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent)
+    }
+
+    .fleet-card .cost-note {
+      font-size: .78rem;
+      margin-top: .75rem;
+      color: var(--muted)
+    }
+
+    .fleet-card .cost-note strong {
+      color: var(--text)
+    }
+
+    .corner-glow {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      top: -20px;
+      right: -20px;
+      opacity: .12;
+      filter: blur(20px)
+    }
+
+    .glow-red {
+      background: #ef4444
+    }
+
+    .glow-amber {
+      background: #f59e0b
+    }
+
+    .glow-green {
+      background: #10b981
+    }
+
+    /* ── INTEGRATION PATH ──────────────────────────────────── */
+    .path-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .path-step {
+      background: var(--surface);
+      padding: 1.4rem 1.25rem;
+      position: relative
+    }
+
+    .path-step:last-child {
+      border-right: none
+    }
+
+    .step-num {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .5rem
+    }
+
+    .path-step h4 {
+      font-size: .95rem;
+      font-weight: 600;
+      margin-bottom: .35rem
+    }
+
+    .path-step p {
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.5
+    }
+
+    .path-step .tech {
+      font-size: .72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent2);
+      margin-top: .5rem
+    }
+
+    /* ── VALUE PROP TABLE ──────────────────────────────────── */
+    .vp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem
+    }
+
+    .vp-table th {
+      padding: .75rem 1rem;
+      text-align: left;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .vp-table td {
+      padding: .85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top
+    }
+
+    .vp-table tr:hover td {
+      background: var(--surface2)
+    }
+
+    .vp-table .check {
+      color: var(--green);
+      font-size: 1rem
+    }
+
+    .vp-table .cross {
+      color: var(--red);
+      font-size: 1rem
+    }
+
+    .vp-table .highlight {
+      color: var(--accent);
+      font-weight: 600
+    }
+
+    /* ── LIVE SIMULATION ───────────────────────────────────── */
+    .sim-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .sim-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap
+    }
+
+    .sim-toolbar h3 {
+      font-size: .95rem;
+      font-weight: 600;
+      flex: 1
+    }
+
+    .sim-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: .4rem .8rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-family: 'Inter', sans-serif
+    }
+
+    .btn {
+      padding: .45rem 1.1rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .18s
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: scale(1.03)
+    }
+
+    .btn-stop {
+      background: rgba(239, 68, 68, .15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, .3)
+    }
+
+    .btn-stop:hover {
+      background: rgba(239, 68, 68, .25)
+    }
+
+    .btn-reset {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border)
+    }
+
+    .sim-body {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      min-height: 380px
+    }
+
+    .sim-chart-area {
+      padding: 1.25rem 1.5rem;
+      border-right: 1px solid var(--border)
+    }
+
+    .sim-chart-title {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    canvas#simCanvas {
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      background: var(--bg)
+    }
+
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .5rem;
+      margin-top: .75rem
+    }
+
+    .sensor-cell {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .5rem .75rem
+    }
+
+    .sensor-name {
+      font-size: .68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .sensor-val {
+      font-size: .95rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: .2rem
+    }
+
+    .sim-panel {
+      padding: 1.25rem
+    }
+
+    .score-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+      text-align: center
+    }
+
+    .score-label {
+      font-size: .7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .3rem
+    }
+
+    .score-value {
+      font-size: 2.6rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      transition: color .3s
+    }
+
+    .alert-badge {
+      display: inline-block;
+      padding: .3rem 1.1rem;
+      border-radius: 99px;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-top: .4rem;
+      transition: all .3s
+    }
+
+    .alert-NOMINAL {
+      background: rgba(16, 185, 129, .15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, .3)
+    }
+
+    .alert-WARNING {
+      background: rgba(245, 158, 11, .15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, .3)
+    }
+
+    .alert-CRITICAL {
+      background: rgba(239, 68, 68, .15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, .3)
+    }
+
+    .business-readout {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem
+    }
+
+    .readout-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .3rem 0;
+      font-size: .8rem
+    }
+
+    .readout-row:not(:last-child) {
+      border-bottom: 1px solid var(--border)
+    }
+
+    .readout-key {
+      color: var(--muted)
+    }
+
+    .readout-val {
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace
+    }
+
+    .event-log {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: .75rem;
+      max-height: 110px;
+      overflow-y: auto;
+      font-size: .72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted)
+    }
+
+    .log-entry {
+      padding: .2rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .04)
+    }
+
+    .log-nom {
+      color: #64748b
+    }
+
+    .log-warn {
+      color: #f59e0b
+    }
+
+    .log-crit {
+      color: #ef4444
+    }
+
+    .log-work {
+      color: #10b981
+    }
+
+    /* ── ROI SECTION ───────────────────────────────────────── */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem
+    }
+
+    .roi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      text-align: center
+    }
+
+    .roi-icon {
+      font-size: 1.8rem;
+      margin-bottom: .5rem
+    }
+
+    .roi-label {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .3rem;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    .roi-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent)
+    }
+
+    .roi-note {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .3rem
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: .8rem
+    }
+
+    @media(max-width:768px) {
+      nav {
+        padding: .85rem 1.25rem
+      }
+
+      .hero {
+        padding: 3rem 1.25rem 2rem
+      }
+
+      .section {
+        padding: 1rem 1.25rem 2.5rem
+      }
+
+      .sim-body {
+        grid-template-columns: 1fr
+      }
+
+      .sim-chart-area {
+        border-right: none;
+        border-bottom: 1px solid var(--border)
+      }
+    }
+  </style>
 </head>
+
 <body>
-<nav><div class="logo">MRO<span>DigitalTwin</span></div><span class="nav-badge">Live Demo &middot; March 2026</span></nav>
-<div class="hero">
-  <h1>Know Before It Breaks.<br/>No Ramp. No Guesswork.</h1>
-  <p>A frame of reference for fleet operators: understand exactly where your aircraft sit on the integration spectrum, what it costs to connect them, and what you gain the moment you do.</p>
-  <div class="kpi-row">
-    <div class="kpi"><div class="kpi-value">$9K</div><div class="kpi-label">Cost / AOG Hour</div></div>
-    <div class="kpi"><div class="kpi-value">68%</div><div class="kpi-label">Events detectable 6&ndash;72 hrs early</div></div>
-    <div class="kpi"><div class="kpi-value">&lt;500ms</div><div class="kpi-label">Anomaly alert latency</div></div>
-    <div class="kpi"><div class="kpi-value">$0</div><div class="kpi-label">Idle infrastructure cost</div></div>
-  </div>
-</div>
-<div class="section">
-  <hr class="divider" style="margin-top:0"/>
-  <div class="section-title">Fleet Integration Spectrum</div>
-  <div class="section-sub">Your aircraft fall into one of three categories. Each has a proven connection path &mdash; the question is cost and time-to-value.</div>
-  <div class="spectrum-wrapper">
-    <div class="spectrum-track"></div>
-    <div class="spectrum-label"><span>&#128308; Requires Edge Decode Hardware</span><span>&#128993; Hybrid / Protocol Bridging</span><span>&#128994; Native API Integration</span></div>
-  </div>
-  <div class="fleet-cards">
-    <div class="fleet-card hard">
-      <div class="corner-glow glow-red"></div>
-      <span class="tag tag-hard">&#128308; Edge-First &middot; Legacy Fleet</span>
-      <h3>Pre-Digital Aircraft<br/><small style="font-weight:400;color:var(--muted)">No data bus / analog avionics</small></h3>
-      <div class="aircraft-list">&#9992; Boeing 737 Classic (300/400/500)<br/>&#9992; McDonnell Douglas MD-80 series<br/>&#9992; Fokker F27 / F28<br/>&#9992; DHC-6 Twin Otter variants<br/>&#9992; Beechcraft 1900D (non-retrofitted)</div>
-      <div class="method-badge">SDR + Edge Node &rarr; Pub/Sub</div>
-      <div class="cost-note"><strong>What "reading at the edge" means:</strong> An SDR receiver the size of a USB drive passively listens to transponder RF emissions. A Raspberry Pi-class edge computer decodes the signal, structures it as JSON, and forwards it over cellular. <strong>Zero modification to the aircraft.</strong></div>
-      <div class="cost-note" style="margin-top:.5rem">&#8987; Integration time: <strong>2&ndash;4 weeks</strong> &nbsp;|&nbsp; HW cost: <strong>~$800&ndash;$2K/aircraft</strong></div>
-    </div>
-    <div class="fleet-card medium">
-      <div class="corner-glow glow-amber"></div>
-      <span class="tag tag-medium">&#128993; Protocol Bridge &middot; Digital Bus</span>
-      <h3>ARINC 429 / MIL-STD-1553<br/><small style="font-weight:400;color:var(--muted)">Digital avionics, proprietary framing</small></h3>
-      <div class="aircraft-list">&#9992; Boeing 737 NG (600&ndash;900)<br/>&#9992; Airbus A320 Family (CFM/IAE)<br/>&#9992; Bombardier CRJ-200/700/900<br/>&#9992; Embraer ERJ-145 / E-170/175<br/>&#9992; Sikorsky S-92 / AW139 (HUMS fit)</div>
-      <div class="method-badge">ARINC &rarr; JSON bridge &rarr; Pub/Sub</div>
-      <div class="cost-note"><strong>What "protocol bridging" means:</strong> A certified bridge module translates ARINC 429 bus frames to JSON without impacting airworthiness. Your existing QAR infrastructure may already do half this work. <strong>No new antennas, no new sensors.</strong></div>
-      <div class="cost-note" style="margin-top:.5rem">&#8987; Integration time: <strong>4&ndash;8 weeks</strong> &nbsp;|&nbsp; HW cost: <strong>~$5K&ndash;$15K/aircraft</strong></div>
-    </div>
-    <div class="fleet-card easy">
-      <div class="corner-glow glow-green"></div>
-      <span class="tag tag-easy">&#128994; API-Native &middot; Modern Fleet</span>
-      <h3>SWIM / FOQA / ADS-C Aircraft<br/><small style="font-weight:400;color:var(--muted)">Cloud-ready data already flowing</small></h3>
-      <div class="aircraft-list">&#9992; Boeing 787 Dreamliner (all)<br/>&#9992; Boeing 777X / 737 MAX<br/>&#9992; Airbus A350 / A220<br/>&#9992; Embraer E2 family (E190-E2+)<br/>&#9992; ATR 72-600 (digital cockpit fit)</div>
-      <div class="method-badge">REST webhook &rarr; Pub/Sub (same day)</div>
-      <div class="cost-note"><strong>What "easy integration" means:</strong> These aircraft already transmit ACARS/ADS-C health data via satellite. Our POST /telemetry endpoint is a standard webhook. Send JSON, get back an anomaly score instantly. <strong>No hardware. Potentially zero install cost.</strong></div>
-      <div class="cost-note" style="margin-top:.5rem">&#8987; Integration time: <strong>Hours&ndash;3 days</strong> &nbsp;|&nbsp; HW cost: <strong>$0</strong></div>
-    </div>
-  </div>
-  <hr class="divider"/>
-  <div class="section-title">How Data Flows &mdash; Every Aircraft Type</div>
-  <div class="section-sub">Regardless of entry point, all data funnels through the same real-time scoring pipeline.</div>
-  <div class="path-steps">
-    <div class="path-step"><div class="step-num">Step 1</div><h4>Signal Capture</h4><p>SDR edge node, ARINC bridge, or direct ACARS feed extracts RSSI, SNR, BER, Doppler, TxPower, and Carrier Deviation.</p><div class="tech">6 sensor dimensions / packet</div></div>
-    <div class="path-step"><div class="step-num">Step 2</div><h4>Secure Transmission</h4><p>Data POST'd to Google Pub/Sub over OIDC-secured HTTPS. Token verification prevents replay attacks even on cellular links.</p><div class="tech">POST /pubsub &middot; OIDC verified</div></div>
-    <div class="path-step"><div class="step-num">Step 3</div><h4>Mahalanobis Scoring</h4><p>Cloud Run computes S(x) against an ITU-R calibrated baseline. Score returned in less than 50ms.</p><div class="tech">chi&#178; threshold: 2.449 / 3.162</div></div>
-    <div class="path-step"><div class="step-num">Step 4</div><h4>Alert + Work Order</h4><p>NOMINAL &rarr; Firestore log. WARNING &rarr; Slack alert. CRITICAL &rarr; ERP webhook fires a draft work order automatically.</p><div class="tech">ERP webhook &middot; Firestore audit trail</div></div>
-    <div class="path-step"><div class="step-num">Step 5</div><h4>Mechanic Takes Action</h4><p>Pre-flight inspection team sees a work order 6&ndash;72 hours before the flight &mdash; while the aircraft is still at gate.</p><div class="tech">Avg lead time: 48 hours</div></div>
-  </div>
-  <hr class="divider"/>
-  <div class="section-title">Why Not Just Use What You Already Have?</div>
-  <div class="section-sub">Existing MRO tools were not built for correlated RF-domain failure detection.</div>
-  <table class="vp-table">
-    <thead><tr><th>Capability</th><th>ThingWorx / Predix / Maximo</th><th>Our RF Digital Twin</th></tr></thead>
-    <tbody>
-      <tr><td>Physics-aware RF scoring (RSSI &times; SNR &times; BER correlation)</td><td><span class="cross">&#10007;</span> Monitors each sensor independently &mdash; misses correlated faults</td><td><span class="check">&#10003;</span> <span class="highlight">Mahalanobis across all 6 RF dimensions simultaneously</span></td></tr>
-      <tr><td>ITU-R threshold calibration</td><td><span class="cross">&#10007;</span> Generic ML thresholds; high false-positive rate</td><td><span class="check">&#10003;</span> chi&#178; thresholds at 95th/99th percentile &mdash; DO-178C auditable</td></tr>
-      <tr><td>Legacy aircraft support (SDR edge decode)</td><td><span class="cross">&#10007;</span> Requires existing data bus output</td><td><span class="check">&#10003;</span> SDR passive capture &mdash; no aircraft modification</td></tr>
-      <tr><td>Cost model</td><td><span class="cross">&#10007;</span> $500K+/yr + 6-month deployment</td><td><span class="check">&#10003;</span> <span class="highlight">$499/mo Professional plan; scale-to-zero infra</span></td></tr>
-      <tr><td>ERP auto work-order on CRITICAL alerts</td><td><span class="cross">&#10007;</span> Manual escalation workflow required</td><td><span class="check">&#10003;</span> Webhook fires instantly; draft W/O in your MRO system</td></tr>
-      <tr><td>FACE / MOSA compliance pathway</td><td><span class="cross">&#10007;</span> Proprietary stacks</td><td><span class="check">&#10003;</span> FACE 3.0 UoC submission roadmap Q3 2026</td></tr>
-    </tbody>
-  </table>
-  <hr class="divider"/>
-  <div class="section-title">Business Case at a Glance</div>
-  <div class="section-sub">Based on a 20-aircraft regional fleet, Professional plan. AOG cost = $9,000/hr industry average.</div>
-  <div class="roi-grid">
-    <div class="roi-card"><div class="roi-icon">&#9992;</div><div class="roi-label">AOG Events Prevented / Year</div><div class="roi-number">3&ndash;5</div><div class="roi-note">At 68% early-detection rate on a 20-ac fleet</div></div>
-    <div class="roi-card"><div class="roi-icon">&#128176;</div><div class="roi-label">Saved per AOG Event</div><div class="roi-number">$54K+</div><div class="roi-note">6 hrs &times; $9K + crew/passenger recovery</div></div>
-    <div class="roi-card"><div class="roi-icon">&#128200;</div><div class="roi-label">Annual Savings Low-End</div><div class="roi-number">$162K</div><div class="roi-note">3 events prevented &times; $54K average</div></div>
-    <div class="roi-card"><div class="roi-icon">&#127919;</div><div class="roi-label">Annual Platform Cost</div><div class="roi-number">$5,988</div><div class="roi-note">Professional plan &middot; $499/mo &times; 12</div></div>
-    <div class="roi-card"><div class="roi-icon">&#128640;</div><div class="roi-label">ROI Ratio (Low-End)</div><div class="roi-number">27:1</div><div class="roi-note">Every dollar spent returns $27 in avoided costs</div></div>
-    <div class="roi-card"><div class="roi-icon">&#8987;</div><div class="roi-label">Payback Period</div><div class="roi-number">&lt;2 Weeks</div><div class="roi-note">After first AOG event prevented</div></div>
-  </div>
-  <hr class="divider"/>
-  <div class="section-title">Live Anomaly Simulation</div>
-  <div class="section-sub">Select an aircraft type. Watch the Mahalanobis score climb as a failure develops and see a work order trigger automatically.</div>
-  <div class="sim-container">
-    <div class="sim-toolbar">
-      <h3>&#128752; RF Telemetry Monitor</h3>
-      <select class="sim-select" id="aircraftType">
-        <option value="legacy">&#128308; Legacy Fleet (SDR Edge &mdash; 737 Classic)</option>
-        <option value="arinc">&#128993; ARINC 429 Bridge (737 NG / A320)</option>
-        <option value="modern" selected>&#128994; Modern Fleet API (787 / A350)</option>
-      </select>
-      <select class="sim-select" id="scenarioType">
-        <option value="transponder">Transponder Degradation (72-hr curve)</option>
-        <option value="burst">Burst Fault (SSPA Failure)</option>
-        <option value="nominal">Normal Operations</option>
-      </select>
-      <button class="btn btn-primary" id="btnStart">&#9654; Start Simulation</button>
-      <button class="btn btn-stop" id="btnStop" disabled>&#9632; Stop</button>
-      <button class="btn btn-reset" id="btnReset">&#8634; Reset</button>
-    </div>
-    <div class="sim-body">
-      <div class="sim-chart-area">
-        <div class="sim-chart-title">Mahalanobis Anomaly Score S(x) &mdash; Real-Time</div>
-        <canvas id="simCanvas"></canvas>
-        <div class="sensor-grid">
-          <div class="sensor-cell"><div class="sensor-name">RSSI</div><div class="sensor-val" id="s-rssi">&mdash;</div></div>
-          <div class="sensor-cell"><div class="sensor-name">SNR</div><div class="sensor-val" id="s-snr">&mdash;</div></div>
-          <div class="sensor-cell"><div class="sensor-name">BER</div><div class="sensor-val" id="s-ber">&mdash;</div></div>
-          <div class="sensor-cell"><div class="sensor-name">Doppler</div><div class="sensor-val" id="s-dop">&mdash;</div></div>
-          <div class="sensor-cell"><div class="sensor-name">Tx Power</div><div class="sensor-val" id="s-tx">&mdash;</div></div>
-          <div class="sensor-cell"><div class="sensor-name">Carrier Dev</div><div class="sensor-val" id="s-carr">&mdash;</div></div>
-        </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">MRO<span>DigitalTwin</span></div>
+    <span class="nav-badge">Live Demo · March 2026</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Know Before It Breaks.<br />No Ramp. No Guesswork.</h1>
+    <p>A frame of reference for fleet operators: understand exactly where your aircraft sit on the integration spectrum,
+      what it costs to connect them, and what you gain the moment you do.</p>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">$9K</div>
+        <div class="kpi-label">Cost / AOG Hour</div>
       </div>
-      <div class="sim-panel">
-        <div class="score-box">
-          <div class="score-label">Anomaly Score S(x)</div>
-          <div class="score-value" id="scoreDisplay" style="color:#10b981">0.000</div>
-          <div><span class="alert-badge alert-NOMINAL" id="alertBadge">NOMINAL</span></div>
-        </div>
-        <div class="business-readout">
-          <div class="readout-row"><span class="readout-key">Aircraft</span><span class="readout-val" id="ro-aircraft">&mdash;</span></div>
-          <div class="readout-row"><span class="readout-key">Connection</span><span class="readout-val" id="ro-conn">&mdash;</span></div>
-          <div class="readout-row"><span class="readout-key">Packets Sent</span><span class="readout-val" id="ro-packets">0</span></div>
-          <div class="readout-row"><span class="readout-key">Anomalies</span><span class="readout-val" id="ro-anomalies">0</span></div>
-          <div class="readout-row"><span class="readout-key">Work Orders</span><span class="readout-val" id="ro-workorders" style="color:#10b981">0</span></div>
-          <div class="readout-row"><span class="readout-key">Cost Risk Averted</span><span class="readout-val" id="ro-cost" style="color:#3b82f6">$0</span></div>
-        </div>
-        <div class="event-log" id="eventLog"><div class="log-nom">Simulation ready. Select aircraft type and press Start.</div></div>
+      <div class="kpi">
+        <div class="kpi-value">40%</div>
+        <div class="kpi-label">Reduction in No Fault Found (NFF)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">&lt;50ms</div>
+        <div class="kpi-label">gRPC Ingest Latency</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">$0</div>
+        <div class="kpi-label">Idle infrastructure cost</div>
       </div>
     </div>
   </div>
-</div>
-<footer>MRO Digital Twin &middot; RF Telemetry Intelligence Platform &middot; March 2026 &middot; <em>Predictive, not reactive.</em></footer>
-<script>
-const NT=2.449,CT=3.162;
-const AM={legacy:{label:'B737 Classic',conn:'SDR Edge Node'},arinc:{label:'B737NG/A320',conn:'ARINC 429 Bridge'},modern:{label:'B787/A350',conn:'REST Webhook'}};
-const MU=[-85,14.5,-4,.2,50,.5];
-const SI=[[.25,0,0,0,0,0],[0,4,0,0,0,0],[0,0,100,0,0,0],[0,0,0,400,0,0],[0,0,0,0,.04,0],[0,0,0,0,0,400]];
-function g(m,s){const u=Math.random()||1e-10;return m+Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*Math.random())*s;}
-function maha(x){const d=x.map((v,i)=>v-MU[i]);let s=0;for(let i=0;i<6;i++)for(let j=0;j<6;j++)s+=d[i]*SI[i][j]*d[j];return Math.sqrt(Math.max(0,s));}
-function cls(s){return s>=CT?'CRITICAL':s>=NT?'WARNING':'NOMINAL';}
-function getV(sc,t,T){const p=t/(T||1);
-  if(sc==='transponder'){const d=p*p;return[g(-85-20*d,1.5),g(14.5-12*d,.4),g(-4+2.5*d,.08),g(.2+2*d,.1),g(50-5*d,.8),g(.5+4*d,.15)];}
-  if(sc==='burst'&&p>=.5)return[-112,.5,-1.5,8,12,18];
-  return[g(-85,2),g(14.5,.5),g(-4,.05),g(.2,.05),g(50,1),g(.5,.02)];}
-const canvas=document.getElementById('simCanvas'),ctx=canvas.getContext('2d');
-let W=canvas.width=canvas.offsetWidth,H=canvas.height=220;
-const hist=[],MAX=80;
-function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle='#0a0d14';ctx.fillRect(0,0,W,H);
-  const y=s=>H-(s/5.5)*H;
-  ctx.strokeStyle='rgba(16,185,129,.3)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(0,y(NT));ctx.lineTo(W,y(NT));ctx.stroke();
-  ctx.fillStyle='rgba(16,185,129,.6)';ctx.font='10px Inter';ctx.fillText('NOMINAL/WARNING 2.449',6,y(NT)-4);
-  ctx.strokeStyle='rgba(239,68,68,.3)';ctx.beginPath();ctx.moveTo(0,y(CT));ctx.lineTo(W,y(CT));ctx.stroke();
-  ctx.fillStyle='rgba(239,68,68,.6)';ctx.fillText('CRITICAL 3.162',6,y(CT)-4);ctx.setLineDash([]);
-  if(hist.length<2)return;
-  const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,'rgba(59,130,246,.35)');gr.addColorStop(1,'rgba(59,130,246,.02)');
-  ctx.fillStyle=gr;ctx.beginPath();hist.forEach((s,i)=>{const x=(i/(MAX-1))*W;i===0?ctx.moveTo(x,y(s)):ctx.lineTo(x,y(s));});
-  ctx.lineTo((hist.length-1)/(MAX-1)*W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
-  ctx.strokeStyle='#3b82f6';ctx.lineWidth=2;ctx.beginPath();hist.forEach((s,i)=>{const x=(i/(MAX-1))*W;i===0?ctx.moveTo(x,y(s)):ctx.lineTo(x,y(s));});ctx.stroke();}
-let timer=null,tick=0,tot=80,pkts=0,anoms=0,wos=0,cost=0;
-const el=id=>document.getElementById(id);
-function addLog(msg,c){const d=document.createElement('div');d.className='log-entry '+c;d.textContent='['+new Date().toLocaleTimeString()+'] '+msg;el('eventLog').prepend(d);if(el('eventLog').children.length>30)el('eventLog').removeChild(el('eventLog').lastChild);}
-function resetUI(){hist.length=0;tick=0;pkts=0;anoms=0;wos=0;cost=0;el('scoreDisplay').textContent='0.000';el('scoreDisplay').style.color='#10b981';el('alertBadge').className='alert-badge alert-NOMINAL';el('alertBadge').textContent='NOMINAL';['ro-aircraft','ro-conn'].forEach(id=>el(id).textContent='\u2014');['ro-packets','ro-anomalies','ro-workorders'].forEach(id=>el(id).textContent='0');el('ro-cost').textContent='$0';el('eventLog').innerHTML='<div class="log-nom">Simulation ready. Press Start.</div>';draw();}
-function doTick(){const sc=el('scenarioType').value,ac=el('aircraftType').value,m=AM[ac],v=getV(sc,tick,tot),s=maha(v),l=cls(s);
-  hist.push(s);if(hist.length>MAX)hist.shift();
-  el('scoreDisplay').textContent=s.toFixed(3);el('scoreDisplay').style.color=l==='CRITICAL'?'#ef4444':l==='WARNING'?'#f59e0b':'#10b981';
-  el('alertBadge').className='alert-badge alert-'+l;el('alertBadge').textContent=l;
-  pkts++;el('ro-aircraft').textContent=m.label;el('ro-conn').textContent=m.conn;el('ro-packets').textContent=pkts;
-  el('s-rssi').textContent=v[0].toFixed(1)+' dBm';el('s-snr').textContent=v[1].toFixed(1)+' dB';el('s-ber').textContent='10^'+v[2].toFixed(2);
-  el('s-dop').textContent=v[3].toFixed(2)+' kHz';el('s-tx').textContent=v[4].toFixed(1)+' W';el('s-carr').textContent=v[5].toFixed(2)+' ppm';
-  if(l!=='NOMINAL'){anoms++;el('ro-anomalies').textContent=anoms;addLog('S(x)='+s.toFixed(3)+' \u2192 '+l+' | RF drift detected',l==='CRITICAL'?'log-crit':'log-warn');}
-  else if(tick%5===0)addLog('S(x)='+s.toFixed(3)+' \u2192 NOMINAL','log-nom');
-  if(l==='CRITICAL'&&wos===0){wos++;cost+=54000;el('ro-workorders').textContent=wos;el('ro-cost').textContent='$'+cost.toLocaleString();addLog('\ud83d\udd27 CRITICAL \u2192 ERP webhook fired \u2192 WO-2026-0'+(Math.floor(Math.random()*9000)+1000)+' drafted!','log-work');}
-  draw();tick++;if(tick>=tot){clearInterval(timer);timer=null;el('btnStart').disabled=false;el('btnStop').disabled=true;addLog('Simulation complete.','log-nom');}}
-el('btnStart').addEventListener('click',()=>{if(timer)return;resetUI();el('btnStart').disabled=true;el('btnStop').disabled=false;addLog('Starting: '+AM[el('aircraftType').value].label,'log-nom');timer=setInterval(doTick,250);});
-el('btnStop').addEventListener('click',()=>{if(timer){clearInterval(timer);timer=null;}el('btnStart').disabled=false;el('btnStop').disabled=true;addLog('Paused.','log-nom');});
-el('btnReset').addEventListener('click',()=>{if(timer){clearInterval(timer);timer=null;}el('btnStart').disabled=false;el('btnStop').disabled=true;resetUI();});
-draw();
-</script>
+
+  <div class="section">
+    <hr class="divider" style="margin-top:0" />
+
+    <!-- ── FLEET INTEGRATION SPECTRUM ── -->
+    <div class="section-title">Fleet Integration Spectrum</div>
+    <div class="section-sub">Your aircraft fall into one of three categories. Each has a proven connection path — the
+      question is cost and time-to-value.</div>
+
+    <div class="spectrum-wrapper">
+      <div class="spectrum-track"></div>
+      <div class="spectrum-label">
+        <span>🔴 Requires Edge Decode Hardware</span>
+        <span>🟡 Hybrid / Protocol Bridging</span>
+        <span>🟢 Native API Integration</span>
+      </div>
+    </div>
+
+    <div class="fleet-cards">
+
+      <!-- HARD: Legacy aircraft -->
+      <div class="fleet-card hard">
+        <div class="corner-glow glow-red"></div>
+        <span class="tag tag-hard">🔴 Edge-First · Legacy Fleet</span>
+        <h3>Pre-Digital Aircraft<br /><small style="font-weight:400;color:var(--muted)">No data bus / analog
+            avionics</small></h3>
+        <div class="aircraft-list">
+          ✈ Boeing 737 Classic (300/400/500)<br />
+          ✈ McDonnell Douglas MD-80 series<br />
+          ✈ Fokker F27 / F28<br />
+          ✈ DHC-6 Twin Otter variants<br />
+          ✈ Beechcraft 1900D (non-retrofitted)
+        </div>
+        <div class="method-badge">SDR + Edge Node → Pub/Sub</div>
+        <div class="cost-note">
+          <strong>What "reading at the edge" means:</strong> There is no digital output. An SDR (Software-Defined Radio)
+          receiver — about the size of a USB drive — passively listens to transponder RF emissions and a small edge
+          computer (Raspberry Pi-class) decodes the signal, structures it as a JSON telemetry packet, and forwards it
+          over cellular or Wi-Fi to our cloud pipeline. <strong>Zero modification to the aircraft.</strong>
+        </div>
+        <div class="cost-note" style="margin-top:.5rem">⏱ Integration time: <strong>2–4 weeks</strong> &nbsp;|&nbsp; HW
+          cost: <strong>≈$800–$2K/aircraft</strong></div>
+      </div>
+
+      <!-- MEDIUM: ARINC / older digital bus -->
+      <div class="fleet-card medium">
+        <div class="corner-glow glow-amber"></div>
+        <span class="tag tag-medium">🟡 Protocol Bridge · Digital Bus</span>
+        <h3>ARINC 429 / MIL-STD-1553<br /><small style="font-weight:400;color:var(--muted)">Digital avionics,
+            proprietary framing</small></h3>
+        <div class="aircraft-list">
+          ✈ Boeing 737 NG (600–900)<br />
+          ✈ Airbus A320 Family (CFM/IAE)<br />
+          ✈ Bombardier CRJ-200/700/900<br />
+          ✈ Embraer ERJ-145 / E-170/175<br />
+          ✈ Sikorsky S-92 / AW139 (HUMS fit)
+        </div>
+        <div class="method-badge">ARINC → JSON bridge → Pub/Sub</div>
+        <div class="cost-note">
+          <strong>What "protocol bridging" means:</strong> These aircraft output ARINC 429 labels (RF/nav data words)
+          through existing data concentrators. A certified protocol bridge (Curtiss-Wright or Astronics
+          ARINC-to-Ethernet module) translates the bus frames to JSON without impacting airworthiness. Your existing
+          ACARS/QAR infrastructure may already do half this work. <strong>No new antennas, no new sensors.</strong>
+        </div>
+        <div class="cost-note" style="margin-top:.5rem">⏱ Integration time: <strong>4–8 weeks</strong> &nbsp;|&nbsp; HW
+          cost: <strong>≈$5K–$15K/aircraft</strong></div>
+      </div>
+
+      <!-- EASY: Modern fleet / API-native -->
+      <div class="fleet-card easy">
+        <div class="corner-glow glow-green"></div>
+        <span class="tag tag-easy">🟢 API-Native · Modern Fleet</span>
+        <h3>SWIM / FOQA / ADS-C Aircraft<br /><small style="font-weight:400;color:var(--muted)">Cloud-ready data already
+            flowing</small></h3>
+        <div class="aircraft-list">
+          ✈ Boeing 787 Dreamliner (all)<br />
+          ✈ Boeing 777X / 737 MAX<br />
+          ✈ Airbus A350 / A220<br />
+          ✈ Embraer E2 family (E190-E2+)<br />
+          ✈ ATR 72-600 (digital cockpit fit)
+        </div>
+        <div class="method-badge">REST webhook → Pub/Sub (same day)</div>
+        <div class="cost-note">
+          <strong>What "easy integration" means:</strong> These aircraft already transmit ACARS/ADS-C health data via
+          satellite or VHF ACARS ground stations. Our <code>POST /telemetry</code> endpoint is a standard webhook. Your
+          existing ground ACARS server or airline ops system sends us a JSON payload — we return a Mahalanobis anomaly
+          score in the same HTTP response. <strong>No hardware. Potentially zero install cost.</strong>
+        </div>
+        <div class="cost-note" style="margin-top:.5rem">⏱ Integration time: <strong>Hours–3 days</strong> &nbsp;|&nbsp;
+          HW cost: <strong>$0</strong></div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── HOW DATA FLOWS ── -->
+    <div class="section-title">How Data Flows — Every Aircraft Type</div>
+    <div class="section-sub">Regardless of entry point, all data funnels through the same real-time scoring pipeline.
+      The anomaly engine doesn't care where the signal started.</div>
+
+    <div class="path-steps">
+      <div class="path-step">
+        <div class="step-num">Step 1</div>
+        <h4>Signal Capture</h4>
+        <p>SDR edge node, ARINC bridge, or direct ACARS feed extracts RSSI, SNR, BER, Doppler, TxPower, and Carrier
+          Deviation.</p>
+        <div class="tech">6 sensor dimensions / packet</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">Step 2</div>
+        <h4>gRPC Secure Ingest</h4>
+        <p>Data streamed via gRPC/WebTransport (H3) over OIDC-secured links. Binary Protobuf serialization eliminates
+          HTTP overhead and head-of-line blocking.</p>
+        <div class="tech">gRPC / WebTransport · &lt;2ms Ingest</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">Step 2.5</div>
+        <h4>Baseline Bootstrapping</h4>
+        <p>Physics-seeding (RTCA DO-260B) followed by in-situ tail calibration. The model learns the aircraft's unique
+          RF signature in the first 50 flights.</p>
+        <div class="tech">DO-260B / Phase 1 Calibration</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">Step 3</div>
+        <h4>Mahalanobis Scoring</h4>
+        <p>Cloud Run computes S(x) = √[(x−μ)ᵀ Σ⁻¹ (x−μ)] against an ITU-R–physics-calibrated baseline. Score in
+          &lt;50ms.</p>
+        <div class="tech">χ² threshold: 2.449 / 3.162 · &lt;50ms TTL</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">Step 4</div>
+        <h4>Alert + Work Order</h4>
+        <p>NOMINAL → logged to Firestore. WARNING → Slack/email alert. CRITICAL → ERP webhook fires a draft work order
+          in your MRO system automatically.</p>
+        <div class="tech">ERP webhook · Firestore audit trail</div>
+      </div>
+      <div class="path-step">
+        <div class="step-num">Step 5</div>
+        <h4>Mechanic Takes Action</h4>
+        <p>Pre-flight inspection team sees a drafted work order 6–72 hours before the flight — while the aircraft is
+          still maintainable at gate.</p>
+        <div class="tech">Avg lead time: 48 hours</div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── COMPETITIVE COMPARISON ── -->
+    <div class="section-title">Why Not Just Use What You Already Have?</div>
+    <div class="section-sub">Existing MRO tools weren't built for correlated RF-domain failure detection. Here's the
+      honest comparison.</div>
+
+    <table class="vp-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>ThingWorx / Predix / Maximo</th>
+          <th>Our RF Digital Twin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Physics-aware RF scoring (RSSI × SNR × BER correlation)</td>
+          <td><span class="cross">✗</span> Monitors each sensor independently — misses correlated faults</td>
+          <td><span class="check">✓</span> <span class="highlight">Mahalanobis across all 6 RF dimensions
+              simultaneously</span></td>
+        </tr>
+        <tr>
+          <td>ITU-R threshold calibration</td>
+          <td><span class="cross">✗</span> Generic ML thresholds; high false-positive rate</td>
+          <td><span class="check">✓</span> χ² thresholds at 95th/99th percentile — auditable by DO-178C</td>
+        </tr>
+        <tr>
+          <td>Legacy aircraft support (SDR edge decode)</td>
+          <td><span class="cross">✗</span> Requires existing data bus output</td>
+          <td><span class="check">✓</span> SDR passive capture — no aircraft modification</td>
+        </tr>
+        <tr>
+          <td>Cost model</td>
+          <td><span class="cross">✗</span> $500K+/yr + 6-month deployment</td>
+          <td><span class="check">✓</span> <span class="highlight">$499/mo Professional plan; scale-to-zero infra</span>
+          </td>
+        </tr>
+        <tr>
+          <td>ERP work-order auto-creation on CRITICAL alerts</td>
+          <td><span class="cross">✗</span> Manual escalation workflow required</td>
+          <td><span class="check">✓</span> Webhook fires instantly; draft W/O in your inbox</td>
+        </tr>
+        <tr>
+          <td>FACE / MOSA compliance pathway</td>
+          <td><span class="cross">✗</span> Not applicable (proprietary stacks)</td>
+          <td><span class="check">✓</span> Roadmap: FACE 3.0 UoC submission Q3 2026</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider" />
+
+    <!-- ── ROI ── -->
+    <div class="section-title">Business Case at a Glance</div>
+    <div class="section-sub">Based on a 20-aircraft regional fleet, Professional plan. AOG cost = $9,000/hr industry
+      average.</div>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-icon">✈</div>
+        <div class="roi-label">AOG Events Prevented / Year</div>
+        <div class="roi-number">3–5</div>
+        <div class="roi-note">At 68% early-detection rate on a 20-ac fleet</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">💰</div>
+        <div class="roi-label">Saved per AOG Event</div>
+        <div class="roi-number">$54K+</div>
+        <div class="roi-note">6 hrs × $9K + crew/passenger recovery</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">📈</div>
+        <div class="roi-label">Annual Savings Low-End</div>
+        <div class="roi-number">$162K</div>
+        <div class="roi-note">3 events prevented × $54K average</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🎯</div>
+        <div class="roi-label">Annual Platform Cost</div>
+        <div class="roi-number">$5,988</div>
+        <div class="roi-note">Professional plan · $499/mo × 12</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">🚀</div>
+        <div class="roi-label">ROI Ratio (Low-End)</div>
+        <div class="roi-number">27:1</div>
+        <div class="roi-note">Every dollar spent returns $27 in avoided costs</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-icon">⏱</div>
+        <div class="roi-label">Payback Period</div>
+        <div class="roi-number">&lt;2 Weeks</div>
+        <div class="roi-note">After first AOG event prevented</div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- ── LIVE SIMULATION ── -->
+    <div class="section-title">Live Anomaly Simulation</div>
+    <div class="section-sub">
+      Select an aircraft type. The simulation replays realistic RF telemetry — watch the Mahalanobis score climb as a
+      failure develops, and see how a work order is triggered automatically.
+    </div>
+
+    <div class="sim-container">
+      <div class="sim-toolbar">
+        <h3>🛰️ RF Telemetry Monitor</h3>
+        <select class="sim-select" id="aircraftType">
+          <option value="legacy">🔴 Legacy Fleet (SDR Edge — 737 Classic)</option>
+          <option value="arinc">🟡 ARINC 429 Bridge (737 NG / A320)</option>
+          <option value="modern" selected>🟢 Modern Fleet API (787 / A350)</option>
+        </select>
+        <select class="sim-select" id="scenarioType">
+          <option value="transponder">Transponder Degradation (72-hr curve)</option>
+          <option value="burst">Burst Fault (SSPA Failure)</option>
+          <option value="nominal">Normal Operations</option>
+        </select>
+        <button class="btn btn-primary" id="btnStart">▶ Start Simulation</button>
+        <button class="btn btn-stop" id="btnStop" disabled>■ Stop</button>
+        <button class="btn btn-reset" id="btnReset">↺ Reset</button>
+      </div>
+
+      <div class="sim-body">
+        <div class="sim-chart-area">
+          <div class="sim-chart-title">Mahalanobis Anomaly Score S(x) — Real-Time</div>
+          <canvas id="simCanvas"></canvas>
+          <div class="sensor-grid">
+            <div class="sensor-cell">
+              <div class="sensor-name">RSSI</div>
+              <div class="sensor-val" id="s-rssi">—</div>
+            </div>
+            <div class="sensor-cell">
+              <div class="sensor-name">SNR</div>
+              <div class="sensor-val" id="s-snr">—</div>
+            </div>
+            <div class="sensor-cell">
+              <div class="sensor-name">BER</div>
+              <div class="sensor-val" id="s-ber">—</div>
+            </div>
+            <div class="sensor-cell">
+              <div class="sensor-name">Doppler</div>
+              <div class="sensor-val" id="s-dop">—</div>
+            </div>
+            <div class="sensor-cell">
+              <div class="sensor-name">Tx Power</div>
+              <div class="sensor-val" id="s-tx">—</div>
+            </div>
+            <div class="sensor-cell">
+              <div class="sensor-name">Carrier Dev</div>
+              <div class="sensor-val" id="s-carr">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-panel">
+          <div class="score-box">
+            <div class="score-label">Anomaly Score S(x)</div>
+            <div class="score-value" id="scoreDisplay" style="color:var(--green)">0.000</div>
+            <div><span class="alert-badge alert-NOMINAL" id="alertBadge">NOMINAL</span></div>
+          </div>
+          <div class="business-readout">
+            <div class="readout-row"><span class="readout-key">Aircraft</span><span class="readout-val"
+                id="ro-aircraft">—</span></div>
+            <div class="readout-row"><span class="readout-key">Connection</span><span class="readout-val"
+                id="ro-conn">—</span></div>
+            <div class="readout-row"><span class="readout-key">Packets Sent</span><span class="readout-val"
+                id="ro-packets">0</span></div>
+            <div class="readout-row"><span class="readout-key">Anomalies</span><span class="readout-val"
+                id="ro-anomalies">0</span></div>
+            <div class="readout-row"><span class="readout-key">Work Orders</span><span class="readout-val"
+                id="ro-workorders" style="color:var(--green)">0</span></div>
+            <div class="readout-row"><span class="readout-key">Cost Risk Averted</span><span class="readout-val"
+                id="ro-cost" style="color:var(--accent)">$0</span></div>
+          </div>
+          <div class="event-log" id="eventLog">
+            <div class="log-nom">Simulation ready. Select aircraft type and press ▶ Start.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    MRO Digital Twin · RF Telemetry Intelligence Platform · March 2026 · <em>Predictive, not reactive.</em>
+  </footer>
+
+  <script>
+    // ── Simulation Engine ─────────────────────────────────────────────
+    const NOMINAL_THR = 2.449;
+    const CRITICAL_THR = 3.162;
+
+    const aircraftMeta = {
+      legacy: { label: 'B737 Classic', conn: 'SDR Edge Node' },
+      arinc: { label: 'B737NG/A320', conn: 'ARINC 429 Bridge' },
+      modern: { label: 'B787/A350', conn: 'REST Webhook' }
+    };
+
+    // Baseline S-Band RF params
+    const MU = [-85.0, 14.5, -4.0, 0.2, 50.0, 0.5];
+
+    // Inverse covariance (pre-seeded diagonal for demo)
+    const SIGMA_INV = [
+      [0.25, 0, 0, 0, 0, 0],
+      [0, 4.0, 0, 0, 0, 0],
+      [0, 0, 100.0, 0, 0, 0],
+      [0, 0, 0, 400.0, 0, 0],
+      [0, 0, 0, 0, 0.04, 0],
+      [0, 0, 0, 0, 0, 400.0]
+    ];
+
+    function gauss(mean, sd) {
+      const u1 = Math.random() || 1e-10;
+      const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * Math.random());
+      return mean + z * sd;
+    }
+
+    function mahalanobis(x) {
+      const d = x.map((xi, i) => xi - MU[i]);
+      let sum = 0;
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 6; j++) {
+          sum += d[i] * SIGMA_INV[i][j] * d[j];
+        }
+      }
+      return Math.sqrt(Math.max(0, sum));
+    }
+
+    function classify(score) {
+      if (score >= CRITICAL_THR) return 'CRITICAL';
+      if (score >= NOMINAL_THR) return 'WARNING';
+      return 'NOMINAL';
+    }
+
+    // Scenario generators
+    function getVector(scenario, t, totalT) {
+      const p = t / (totalT || 1); // 0→1 progress
+      if (scenario === 'transponder') {
+        // 72-hr degradation curve: RSSI and SNR decay, BER worsens
+        const decay = p * p; // quadratic ramp
+        return [
+          gauss(-85 - 20 * decay, 1.5),
+          gauss(14.5 - 12 * decay, 0.4),
+          gauss(-4.0 + 2.5 * decay, 0.08),
+          gauss(0.2 + 2.0 * decay, 0.1),
+          gauss(50.0 - 5 * decay, 0.8),
+          gauss(0.5 + 4.0 * decay, 0.15),
+        ];
+      }
+      if (scenario === 'burst') {
+        if (p < 0.5) {
+          // nominal first half
+          return [gauss(-85, 2), gauss(14.5, 0.5), gauss(-4, 0.05), gauss(0.2, 0.05), gauss(50, 1), gauss(0.5, 0.02)];
+        } else {
+          // sudden SSPA failure
+          return [-112, 0.5, -1.5, 8.0, 12.0, 18.0];
+        }
+      }
+      // nominal
+      return [gauss(-85, 2), gauss(14.5, 0.5), gauss(-4, 0.05), gauss(0.2, 0.05), gauss(50, 1), gauss(0.5, 0.02)];
+    }
+
+    // Canvas drawing
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width = canvas.offsetWidth;
+    const H = canvas.height = 220;
+    const scoreHistory = [];
+    const MAX_POINTS = 80;
+
+    function drawChart() {
+      ctx.clearRect(0, 0, W, H);
+      // BG
+      ctx.fillStyle = '#0a0d14';
+      ctx.fillRect(0, 0, W, H);
+
+      // grid lines at thresholds
+      function yPos(score) { return H - (score / 5.5) * H; }
+
+      // NOMINAL threshold
+      ctx.strokeStyle = 'rgba(16,185,129,0.3)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, yPos(NOMINAL_THR));
+      ctx.lineTo(W, yPos(NOMINAL_THR));
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(16,185,129,0.6)';
+      ctx.font = '10px Inter';
+      ctx.fillText('NOMINAL/WARNING 2.449', 6, yPos(NOMINAL_THR) - 4);
+
+      // CRITICAL threshold
+      ctx.strokeStyle = 'rgba(239,68,68,0.3)';
+      ctx.beginPath();
+      ctx.moveTo(0, yPos(CRITICAL_THR));
+      ctx.lineTo(W, yPos(CRITICAL_THR));
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(239,68,68,0.6)';
+      ctx.fillText('CRITICAL 3.162', 6, yPos(CRITICAL_THR) - 4);
+      ctx.setLineDash([]);
+
+      if (scoreHistory.length < 2) return;
+
+      // Fill under curve
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, 'rgba(59,130,246,0.35)');
+      grad.addColorStop(1, 'rgba(59,130,246,0.02)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      scoreHistory.forEach((s, idx) => {
+        const x = (idx / (MAX_POINTS - 1)) * W;
+        const y = yPos(s);
+        idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.lineTo((scoreHistory.length - 1) / (MAX_POINTS - 1) * W, H);
+      ctx.lineTo(0, H);
+      ctx.closePath();
+      ctx.fill();
+
+      // Line
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      scoreHistory.forEach((s, idx) => {
+        const x = (idx / (MAX_POINTS - 1)) * W;
+        const y = yPos(s);
+        idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    // State
+    let simTimer = null;
+    let tick = 0;
+    let totalTicks = 80;
+    let packets = 0, anomalies = 0, workOrders = 0;
+    let costAvert = 0;
+
+    const el = id => document.getElementById(id);
+
+    function addLog(msg, cls) {
+      const log = el('eventLog');
+      const d = document.createElement('div');
+      d.className = `log-entry ${cls}`;
+      const now = new Date().toLocaleTimeString();
+      d.textContent = `[${now}] ${msg}`;
+      log.prepend(d);
+      if (log.children.length > 40) log.removeChild(log.lastChild);
+    }
+
+    function updateSensorDisplay(vec) {
+      el('s-rssi').textContent = vec[0].toFixed(1) + ' dBm';
+      el('s-snr').textContent = vec[1].toFixed(1) + ' dB';
+      el('s-ber').textContent = '10^' + vec[2].toFixed(2);
+      el('s-dop').textContent = vec[3].toFixed(2) + ' kHz';
+      el('s-tx').textContent = vec[4].toFixed(1) + ' W';
+      el('s-carr').textContent = vec[5].toFixed(2) + ' ppm';
+    }
+
+    function resetUI() {
+      scoreHistory.length = 0;
+      tick = 0; packets = 0; anomalies = 0; workOrders = 0; costAvert = 0;
+      el('scoreDisplay').textContent = '0.000';
+      el('scoreDisplay').style.color = 'var(--green)';
+      el('alertBadge').className = 'alert-badge alert-NOMINAL';
+      el('alertBadge').textContent = 'NOMINAL';
+      el('ro-aircraft').textContent = '—';
+      el('ro-conn').textContent = '—';
+      el('ro-packets').textContent = '0';
+      el('ro-anomalies').textContent = '0';
+      el('ro-workorders').textContent = '0';
+      el('ro-cost').textContent = '$0';
+      el('eventLog').innerHTML = '<div class="log-nom">Simulation ready. Press ▶ Start.</div>';
+      drawChart();
+    }
+
+    function doTick() {
+      const scenario = el('scenarioType').value;
+      const acType = el('aircraftType').value;
+      const meta = aircraftMeta[acType];
+
+      const vec = getVector(scenario, tick, totalTicks);
+      const score = mahalanobis(vec);
+      const level = classify(score);
+
+      scoreHistory.push(score);
+      if (scoreHistory.length > MAX_POINTS) scoreHistory.shift();
+
+      // Update anomaly score display
+      const scoreEl = el('scoreDisplay');
+      scoreEl.textContent = score.toFixed(3);
+      scoreEl.style.color = level === 'CRITICAL' ? 'var(--red)' : level === 'WARNING' ? 'var(--amber)' : 'var(--green)';
+      el('alertBadge').className = `alert-badge alert-${level}`;
+      el('alertBadge').textContent = level;
+
+      packets++;
+      el('ro-aircraft').textContent = meta.label;
+      el('ro-conn').textContent = meta.conn;
+      el('ro-packets').textContent = packets;
+
+      updateSensorDisplay(vec);
+
+      if (level === 'WARNING' || level === 'CRITICAL') {
+        anomalies++;
+        el('ro-anomalies').textContent = anomalies;
+        addLog(`S(x)=${score.toFixed(3)} → ${level} | RF drift detected`, level === 'CRITICAL' ? 'log-crit' : 'log-warn');
+      } else {
+        if (tick % 5 === 0) addLog(`S(x)=${score.toFixed(3)} → NOMINAL`, 'log-nom');
+      }
+
+      if (level === 'CRITICAL' && workOrders === 0) {
+        workOrders++;
+        costAvert += 54000;
+        el('ro-workorders').textContent = workOrders;
+        el('ro-cost').textContent = '$' + costAvert.toLocaleString();
+        addLog('🔧 CRITICAL alert → ERP webhook fired → Work Order WO-2026-0' + (Math.floor(Math.random() * 9000) + 1000) + ' drafted!', 'log-work');
+      }
+
+      drawChart();
+
+      tick++;
+      if (tick >= totalTicks) {
+        clearInterval(simTimer);
+        simTimer = null;
+        el('btnStart').disabled = false;
+        el('btnStop').disabled = true;
+        addLog('Simulation complete.', 'log-nom');
+      }
+    }
+
+    el('btnStart').addEventListener('click', () => {
+      if (simTimer) return;
+      resetUI();
+      totalTicks = 80;
+      el('btnStart').disabled = true;
+      el('btnStop').disabled = false;
+      const acType = el('aircraftType').value;
+      const meta = aircraftMeta[acType];
+      addLog(`Starting simulation: ${meta.label} via ${meta.conn}`, 'log-nom');
+      simTimer = setInterval(doTick, 250);
+    });
+
+    el('btnStop').addEventListener('click', () => {
+      if (simTimer) { clearInterval(simTimer); simTimer = null; }
+      el('btnStart').disabled = false;
+      el('btnStop').disabled = true;
+      addLog('Simulation paused.', 'log-nom');
+    });
+
+    el('btnReset').addEventListener('click', () => {
+      if (simTimer) { clearInterval(simTimer); simTimer = null; }
+      el('btnStart').disabled = false;
+      el('btnStop').disabled = true;
+      resetUI();
+    });
+
+    drawChart();
+  </script>
 </body>
+
 </html>
