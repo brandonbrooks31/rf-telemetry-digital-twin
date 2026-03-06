@@ -1,0 +1,43 @@
+{
+  "name": "rf-telemetry-digital-twin",
+  "version": "1.0.0",
+  "description": "Genkit-powered RF Telemetry & Predictive Maintenance Digital Twin microservice",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "seed": "tsx src/scripts/seed-baseline.ts",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": [
+    "genkit",
+    "telemetry",
+    "digital-twin",
+    "anomaly-detection",
+    "mahalanobis",
+    "cloud-run",
+    "firebase"
+  ],
+  "author": "brandonbrooks31",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
+    "genkit": "^1.8.0",
+    "@genkit-ai/firebase": "^1.8.0",
+    "@genkit-ai/google-ai": "^1.8.0",
+    "mathjs": "^14.4.0",
+    "zod": "^3.24.2",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
