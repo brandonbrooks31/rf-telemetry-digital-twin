@@ -1061,6 +1061,68 @@
       </div>
     </div>
 
+    <hr class="divider" />
+
+    <!-- ── METRIC DEEP DIVE ── -->
+    <div class="section-title">Metric Deep Dive: Why These Vectors?</div>
+    <div class="section-sub">
+      We don't just look at single sensor spikes. We correlate 6 dimensions of RF physics to identify the "DNA" of a failing part.
+      Here is why we chose these metrics and how they verify part integrity against proven ITU-R and RTCA datasets.
+    </div>
+
+    <div class="fleet-cards" style="margin-top: 2rem;">
+      <div class="fleet-card" style="border-color: var(--border);">
+        <h3>Power & Signal Quality</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+          <strong>RSSI (Received Signal Strength Indicator)</strong>: Measures the raw power of the incoming transponder signal.
+          Sudden drops are often "Cable Loss Canaries"—indicating water ingress in coaxial cables or loose TNC connectors.
+        </p>
+        <p style="font-size: 0.85rem; color: var(--muted);">
+          <strong>SNR (Signal-to-Noise Ratio)</strong>: The ultimate measure of receiver health. A degrading SNR at constant RSSI
+          predicts LNA (Low Noise Amplifier) thermal runaway long before the part fails airworthiness checks.
+        </p>
+      </div>
+
+      <div class="fleet-card" style="border-color: var(--border);">
+        <h3>Data & Spectral Integrity</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+          <strong>BER (Bit Error Rate)</strong>: Measures the percentage of bits that were flipped during transmission.
+          High BER at nominal power is a signature of <em>Multipath Interference</em> or <em>Bit-Flip Anomalies</em> in the digital backend.
+        </p>
+        <p style="font-size: 0.85rem; color: var(--muted);">
+          <strong>Carrier Deviation</strong>: Measured in parts per million (ppm). If the local oscillator drifts beyond 
+          ITU-R M.1177 standards, the aircraft risks being "invisible" to Secondary Surveillance Radar (SSR).
+        </p>
+      </div>
+
+      <div class="fleet-card" style="border-color: var(--border);">
+        <h3>Spatial & Energy Metrics</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+          <strong>Doppler Shift</strong>: Captures the frequency offset relative to velocity. Mismatches between GPS-reported speed
+          and RF-measured Doppler identify FMS (Flight Management System) integration lag.
+        </p>
+        <p style="font-size: 0.85rem; color: var(--muted);">
+          <strong>Tx Power Stability</strong>: High-frequency monitoring of the Power Amplifier's output envelope. 
+          "Jitter" in Tx power is the primary indicator of failing SSPA (Solid State Power Amplifier) stages.
+        </p>
+      </div>
+    </div>
+
+    <div class="business-readout" style="margin-top: 2rem; padding: 2rem;">
+      <h4 style="margin-bottom: 1rem;">Verification Against Proven Datasets</h4>
+      <p style="font-size: 0.9rem; line-height: 1.6; color: var(--muted);">
+        The <strong>Mahalanobis Distance</strong> calculation isn't arbitrary. It creates a multi-dimensional "ellipsoid of normality"
+        based on three proven data pillars:
+      </p>
+      <ul style="margin: 1.5rem 0 0 1.5rem; color: var(--muted); font-size: 0.9rem;">
+        <li style="margin-bottom: 0.5rem;"><strong>RTCA DO-260B Compliance</strong>: We seed the model with the minimum performance standards required for FAA certification.</li>
+        <li style="margin-bottom: 0.5rem;"><strong>Tail-Specific Physics Baselines</strong>: Not all aircraft are equal. We "bootstrap" a unique baseline for every tail number during Phase I.</li>
+        <li style="margin-bottom: 0.5rem;"><strong>ITU-R M.1177 Spectral Masking</strong>: Our anomaly thresholds correspond directly to international radio regulation limits.</li>
+      </ul>
+      <p style="margin-top: 1.5rem; font-weight: 600; color: var(--accent);">
+        When a part drifts outside this multi-physics boundary, S(x) spikes. We catch the failure when it is a "Soft Fault" — saving the cost of a "Hard Failure" AOG.
+      </p>
+    </div>
   </div>
 
   <footer>
@@ -1156,9 +1218,15 @@
       ctx.fillStyle = '#0a0d14';
       ctx.fillRect(0, 0, W, H);
 
-      // grid lines at thresholds
-      function yPos(score) { return H - (score / 5.5) * H; }
+      // --- DYNAMIC SCALING ---
+      // We want the Y-axis to accommodate at least the critical threshold (3.16)
+      // but scale up if the scores go higher (e.g. 80-90 during burst faults).
+      const maxScoreInHistory = scoreHistory.length > 0 ? Math.max(...scoreHistory) : 0;
+      const yMax = Math.max(5.5, maxScoreInHistory * 1.1); // 10% padding
 
+      function yPos(score) { return H - (score / yMax) * H; }
+
+      // grid lines at thresholds
       // NOMINAL threshold
       ctx.strokeStyle = 'rgba(16,185,129,0.3)';
       ctx.setLineDash([4, 4]);
