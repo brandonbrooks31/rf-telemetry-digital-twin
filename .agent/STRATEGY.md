@@ -39,33 +39,30 @@ Build a **production-grade RF Telemetry Digital Twin** that can be demonstrated 
 
 ## ❓ Active Questions
 
-1. **ERP Webhook:** What is the simplest mock SAP PM or Maximo work-order webhook we can stand up in Cloud Run for the pitch?
-2. **Edge Simulator:** Should the simulator run as a local CLI script or as a second Cloud Run service so it can be shown running "from the aircraft"?
-3. **Data Replay:** Can we pre-record a 10-minute telemetry degradation curve and replay it during the demo so the pitch is deterministic?
+1. ~~**ERP Webhook:** What is the simplest mock SAP PM or Maximo work-order webhook we can stand up in Cloud Run for the pitch?~~ → **Resolved:** `erp-webhook/` — standalone Express service, `WO-XXXX` IDs, `AOG`/`HIGH`/`ROUTINE` priority. Runs locally on port 9090 or deploys to Cloud Run.
+2. ~~**Edge Simulator:** Should the simulator run as a local CLI script or as a second Cloud Run service?~~ → **Resolved:** CLI-first (`npm run simulate`). Can point at Cloud Run via `TELEMETRY_URL` env var for pitch day.
+3. ~~**Data Replay:** Can we pre-record a 10-minute telemetry degradation curve and replay it?~~ → **Resolved:** 60-step deterministic curve (NOMINAL → WARNING → CRITICAL) with Gaussian noise. Fully reproducible.
 4. **Latency SLA:** What is the end-to-end p99 latency from Pub/Sub message → anomaly score → Firestore write → webhook call? Target: < 500ms.
-5. **Auth for Pitch:** Should we use an API key or a service-account JWT for the live demo endpoint? (Keep it simple but professional.)
+5. **Auth for Pitch:** Should we use an API key or a service-account JWT for the live demo endpoint?
 
 ---
 
 ## 🏗️ Architecture Overview
 
 ```
-[Edge Simulator (CLI / Cloud Run)]
+[Edge Simulator: npm run simulate]
         │  RF Sensor Vector (JSON)
-        ▼
-[Google Cloud Pub/Sub]  ← zero-trust ingestion boundary
-        │
         ▼
 [RF Telemetry Service  (Cloud Run)]
    ├─ Zod Validation
    ├─ Context Router (Mamba-2 inspired)
    ├─ Mahalanobis Anomaly Scorer
    ├─ Firestore Logger
-   └─ Anomaly Webhook Dispatcher  ← NEW (ERP integration point)
-        │
+   └─ Anomaly Webhook Dispatcher (fire-and-forget, 200ms grace)
+        │  POST {sessionId, alertLevel, anomalyScore, ...}
         ▼
-[Mock ERP Work-Order Service (Cloud Run)]
-   └─ POST /work-orders  →  returns WO-{uuid}
+[Mock ERP Work-Order Service: npm run erp]
+   └─ POST /work-orders  →  { workOrderId: "WO-0001", priority: "AOG", ... }
 ```
 
 ---
@@ -76,8 +73,13 @@ Build a **production-grade RF Telemetry Digital Twin** that can be demonstrated 
 
 - **[2026-03-06]** Core RF Telemetry microservice deployed to Cloud Run. Mahalanobis scorer live with 6-dim sensor vector (RSSI, SNR, BER, Doppler, Tx Power, Carrier Dev). Firestore logging for all events and anomaly triggers.
 - **[2026-03-06]** Pub/Sub event-driven pipeline scaffolded: `deploy_pubsub.sh` creates topic, subscription, and push endpoint. Zero-trust perimeter established.
-- **[2026-03-06]** Existing skills injected: `rf_signal_integrity.md` (RF domain knowledge) and `time_and_harmonics.md` (temporal signal processing). Agent context now domain-aware.
-- **[2026-03-06]** Strategy-to-Execution (S2E) loop initialized: `STRATEGY.md` and `strategic_alignment.md` skill committed. Agent now reads business context before every code task and updates this log after every deploy.
+- **[2026-03-06]** Existing skills injected: `rf_signal_integrity.md` and `time_and_harmonics.md`. Agent context now domain-aware.
+- **[2026-03-06]** Strategy-to-Execution (S2E) loop initialized: `STRATEGY.md` and `strategic_alignment.md` skill committed. Agent reads business context before every code task.
+- **[2026-03-06]** **P0 components built and committed (SHA: 28d45cc):**
+  - `src/scripts/simulate.ts`: 60-step deterministic S-Band degradation curve. NOMINAL (0–19) → WARNING (20–39) → CRITICAL (40–59). Gaussian noise, ANSI live table, 90s demo. `npm run simulate`.
+  - `erp-webhook/index.ts`: Mock SAP PM/Maximo work-order service. Deterministic `WO-XXXX` IDs, AOG/HIGH/ROUTINE priority, in-memory WO store. `npm run erp`.
+  - `src/lib/webhook.ts`: Fire-and-forget dispatcher — 2s timeout, silent failure, never blocks telemetry response. `workOrderId` surfaced in API response.
+  - Telemetry flow (Step 5.5): Anomaly webhook wired in. CRITICAL anomaly now triggers `WO-XXXX` returned in same JSON response.
 
 ---
 
@@ -88,10 +90,10 @@ Build a **production-grade RF Telemetry Digital Twin** that can be demonstrated 
 | Mahalanobis anomaly detection (live endpoint) | ✅ Done | — |
 | Pub/Sub secure event pipeline | ✅ Done | — |
 | S2E strategy loop (STRATEGY.md + skill) | ✅ Done | — |
-| RF Edge Simulator (degradation curve) | 🔴 Not Started | **P0** |
-| Mock ERP Work-Order Webhook | 🔴 Not Started | **P0** |
+| RF Edge Simulator (degradation curve) | ✅ Done | **P0** |
+| Mock ERP Work-Order Webhook | ✅ Done | **P0** |
 | End-to-end latency benchmark (< 500ms p99) | 🔴 Not Started | **P1** |
-| Deterministic 10-min demo replay script | 🔴 Not Started | **P1** |
+| Deterministic 10-min demo replay script | 🟡 Done (90s version) | **P1** |
 | Auth hardening for pitch endpoint | 🔴 Not Started | **P2** |
 | One-page pitch data sheet (ROI math) | 🔴 Not Started | **P2** |
 
